@@ -2,7 +2,7 @@
 
 ## 🛡️ Project Overview
 
-The **Splunk Multi-Cloud Threat Intelligence Platform** is a sophisticated, enterprise-grade cybersecurity monitoring, threat intelligence, and advanced persistent threat (APT) simulation platform. This comprehensive solution leverages **AWS Cloud Infrastructure**, **Kubernetes orchestration**, **Docker containerization**, **Terraform Infrastructure-as-Code**, **Ansible automation**, and **Splunk Enterprise Security** to create a fully operational Security Operations Center (SOC) environment with real-time threat detection, MITRE ATT&CK framework implementation, and advanced behavioral analytics.
+The **Splunk Multi-Cloud Threat Intelligence Platform** is a sophisticated, enterprise-grade cybersecurity monitoring, threat intelligence, and advanced persistent threat (APT) simulation platform. This comprehensive solution leverages **AWS Cloud Infrastructure**, **Kubernetes orchestration**, **Docker containerization**, **Terraform Infrastructure-as-Code**, **Ansible automation**, and **Splunk Enterprise Security** to create a fully operational Security Operations Center (SOC) environment with real-time threat detection, MITRE ATT&CK framework implementation, and advanced behavioral analytics. 
 
 ## 🎯 Project Objectives
 
