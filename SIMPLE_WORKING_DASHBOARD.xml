@@ -1,0 +1,495 @@
+<dashboard version="1.1" theme="dark">
+  <label>Security Operations Dashboard</label>
+  <description>Enterprise cybersecurity monitoring and threat intelligence platform</description>
+
+  <!-- CORPORATE HEADER -->
+  <row>
+    <panel>
+      <html>
+        <style>
+          .corporate-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: #ecf0f1;
+            padding: 25px;
+            border-radius: 4px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+          }
+          .corporate-subtitle {
+            color: #bdc3c7;
+            font-size: 14px;
+            margin-top: 8px;
+            font-weight: 300;
+          }
+          .metric-container {
+            background: #34495e;
+            border: 1px solid #485563;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 5px;
+          }
+        </style>
+        <div class="corporate-header">
+          <h2 style="margin: 0; font-weight: 300; color: #ecf0f1;">Security Operations Dashboard</h2>
+          <div class="corporate-subtitle">Real-time threat monitoring and security analytics</div>
+        </div>
+      </html>
+    </panel>
+  </row>
+
+  <!-- EXECUTIVE SUMMARY METRICS -->
+  <row>
+    <panel>
+      <single>
+        <title>Threat Assessment</title>
+        <search>
+          <query>index=main earliest=-1h | eval threat_level=case(count>100, "ELEVATED", count>50, "MODERATE", count>0, "LOW", 1==1, "MINIMAL") | stats count | eval level=case(count>100, "ELEVATED", count>50, "MODERATE", count>0, "LOW", 1==1, "MINIMAL") | table level</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">110</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#2ecc71","#f39c12","#e74c3c"]</option>
+        <option name="rangeValues">[0,50,100]</option>
+        <option name="underLabel">Current Status</option>
+      </single>
+    </panel>
+    
+    <panel>
+      <single>
+        <title>Active Events</title>
+        <search>
+          <query>index=main source=real_attack_ingestion earliest=-1h | stats count</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">110</option>
+        <option name="numberPrecision">0</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#95a5a6","#f39c12","#e74c3c"]</option>
+        <option name="rangeValues">[0,10,50]</option>
+        <option name="underLabel">Past Hour</option>
+      </single>
+    </panel>
+    
+    <panel>
+      <single>
+        <title>Infrastructure Status</title>
+        <search>
+          <query>index=main earliest=-1h | stats dc(host) as hosts | eval status=case(hosts>=3, "OPTIMAL", hosts>=2, "DEGRADED", hosts>=1, "LIMITED", 1==1, "OFFLINE") | table status</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>60s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">110</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#e74c3c","#f39c12","#2ecc71"]</option>
+        <option name="underLabel">System Health</option>
+      </single>
+    </panel>
+    
+    <panel>
+      <single>
+        <title>Event Rate</title>
+        <search>
+          <query>index=main earliest=-1h | bucket _time span=1m | stats count by _time | stats avg(count) as avg_per_minute | eval velocity=round(avg_per_minute,1) | table velocity</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>60s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">110</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#95a5a6","#3498db","#2980b9"]</option>
+        <option name="rangeValues">[0,20,50]</option>
+        <option name="underLabel">Events/Min</option>
+      </single>
+    </panel>
+  </row>
+
+  <!-- MITRE ATT&CK FRAMEWORK -->
+  <row>
+    <panel>
+      <html>
+        <style>
+          .section-header {
+            background: linear-gradient(90deg, #34495e 0%, #2c3e50 100%);
+            color: #ecf0f1;
+            padding: 12px 20px;
+            border-radius: 4px;
+            text-align: left;
+            font-weight: 400;
+            margin-bottom: 15px;
+            border-left: 3px solid #3498db;
+          }
+        </style>
+        <div class="section-header">
+          MITRE ATT&amp;CK Framework Coverage
+        </div>
+      </html>
+    </panel>
+  </row>
+  
+  <row>
+    <panel>
+      <single>
+        <title>T1059 • Command Execution</title>
+        <search>
+          <query>index=main (sourcetype=bash_history OR sourcetype=cmd_history OR "CommandLine" OR "ProcessCommandLine") earliest=-1h | stats count</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">90</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#7f8c8d","#e67e22","#d35400"]</option>
+        <option name="rangeValues">[0,10,25]</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>T1083 • File Discovery</title>
+        <search>
+          <query>index=main ("ls" OR "dir" OR "find" OR "locate") earliest=-1h | stats count</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">90</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#7f8c8d","#27ae60","#229954"]</option>
+        <option name="rangeValues">[0,10,25]</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>T1082 • System Discovery</title>
+        <search>
+          <query>index=main ("uname" OR "whoami" OR "systeminfo" OR "hostname") earliest=-1h | stats count</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">90</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#7f8c8d","#3498db","#2980b9"]</option>
+        <option name="rangeValues">[0,10,25]</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>T1057 • Process Discovery</title>
+        <search>
+          <query>index=main ("ps" OR "tasklist" OR "Get-Process") earliest=-1h | stats count</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">90</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#7f8c8d","#f39c12","#e67e22"]</option>
+        <option name="rangeValues">[0,10,25]</option>
+      </single>
+    </panel>
+  </row>
+
+  <!-- ADDITIONAL TECHNIQUES -->
+  <row>
+    <panel>
+      <single>
+        <title>T1049 • Network Discovery</title>
+        <search>
+          <query>index=main ("netstat" OR "ss" OR "netconn" OR "nmap") earliest=-1h | stats count</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">90</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#7f8c8d","#8e44ad","#7d3c98"]</option>
+        <option name="rangeValues">[0,5,15]</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>T1078 • Valid Accounts</title>
+        <search>
+          <query>index=main (sourcetype=auth OR "login" OR "sudo" OR "su") earliest=-1h | stats count</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">90</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#7f8c8d","#16a085","#138d75"]</option>
+        <option name="rangeValues">[0,5,15]</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>T1105 • Data Transfer</title>
+        <search>
+          <query>index=main ("curl" OR "wget" OR "download" OR "scp") earliest=-1h | stats count</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">90</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#7f8c8d","#2980b9","#1f4e79"]</option>
+        <option name="rangeValues">[0,3,10]</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>T1548 • Privilege Escalation</title>
+        <search>
+          <query>index=main ("escalate" OR "privilege" OR "root" OR "admin") earliest=-1h | stats count</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">90</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#7f8c8d","#c0392b","#a93226"]</option>
+        <option name="rangeValues">[0,2,8]</option>
+      </single>
+    </panel>
+  </row>
+
+  <!-- INFRASTRUCTURE MONITORING -->
+  <row>
+    <panel>
+      <html>
+        <div class="section-header">
+          Infrastructure Security Monitoring
+        </div>
+      </html>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <single>
+        <title>Cloud API Activity</title>
+        <search>
+          <query>index=main (sourcetype=aws* OR "aws" OR "s3" OR "ec2" OR "iam") earliest=-1h | stats count</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">90</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#7f8c8d","#3498db","#2980b9"]</option>
+        <option name="rangeValues">[0,20,50]</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Container Security</title>
+        <search>
+          <query>index=main (sourcetype=docker OR "docker" OR "container" OR "kubernetes" OR "k8s") earliest=-1h | stats count</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">90</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#7f8c8d","#27ae60","#229954"]</option>
+        <option name="rangeValues">[0,15,35]</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Network Security</title>
+        <search>
+          <query>index=main (sourcetype=netstat OR "netstat" OR "ss" OR "netconn" OR "firewall") earliest=-1h | stats count</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">90</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#7f8c8d","#e67e22","#d35400"]</option>
+        <option name="rangeValues">[0,10,30]</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Identity Management</title>
+        <search>
+          <query>index=main (sourcetype=auth OR "authentication" OR "authorization" OR "login" OR "logout") earliest=-1h | stats count</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">90</option>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["#7f8c8d","#8e44ad","#7d3c98"]</option>
+        <option name="rangeValues">[0,8,25]</option>
+      </single>
+    </panel>
+  </row>
+
+  <!-- SECURITY INTELLIGENCE TABLE -->
+  <row>
+    <panel>
+      <table>
+        <title>Security Event Analysis</title>
+        <search>
+          <query>index=main earliest=-1h | eval technique=case(
+            match(_raw, "uname|whoami|hostname"), "T1082 - System Information Discovery",
+            match(_raw, "ps|tasklist"), "T1057 - Process Discovery", 
+            match(_raw, "ls|dir|find"), "T1083 - File and Directory Discovery",
+            match(_raw, "netstat|ss"), "T1049 - System Network Connections Discovery",
+            match(_raw, "sudo|su"), "T1078 - Valid Accounts",
+            match(_raw, "curl|wget"), "T1105 - Ingress Tool Transfer",
+            match(_raw, "escalate|privilege"), "T1548 - Abuse Elevation Control Mechanism",
+            1==1, "Other Activity"
+          ), risk=case(
+            match(technique, "T1548|T1078"), "High",
+            match(technique, "T1105|T1049"), "Medium", 
+            1==1, "Low"
+          ) | where technique!="Other Activity" | stats count by technique, risk, host, source | sort -count</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">cell</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="count">12</option>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <format type="color" field="risk">
+          <colorPalette type="map">{"High":#c0392b,"Medium":#f39c12,"Low":#95a5a6}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+
+  <!-- COMMAND ACTIVITY FEED -->
+  <row>
+    <panel>
+      <table>
+        <title>Command Execution Monitor</title>
+        <search>
+          <query>index=main earliest=-1h | search ("uname" OR "whoami" OR "ps" OR "ls" OR "netstat" OR "curl" OR "wget" OR "sudo") | eval classification=case(
+            match(_raw, "sudo|su|root"), "Privileged",
+            match(_raw, "curl|wget|download"), "Network",
+            1==1, "Standard"
+          ) | head 20 | table _time, host, source, classification, _raw | sort -_time</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>30s</refresh>
+        </search>
+        <option name="drilldown">cell</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="count">20</option>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <format type="color" field="classification">
+          <colorPalette type="map">{"Privileged":#c0392b,"Network":#f39c12,"Standard":#95a5a6}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+
+  <!-- INFRASTRUCTURE HEALTH -->
+  <row>
+    <panel>
+      <table>
+        <title>Infrastructure Performance Metrics</title>
+        <search>
+          <query>index=main earliest=-1h | stats count as events, latest(_time) as last_seen, earliest(_time) as first_seen by host, source | eval 
+            status=case(events>50, "Active", events>20, "Normal", events>0, "Limited", 1==1, "Inactive"),
+            uptime_minutes=round((last_seen-first_seen)/60,1),
+            performance=case(events>50, "Optimal", events>20, "Good", events>10, "Fair", 1==1, "Poor")
+          | sort -events | head 15 | table host, source, status, events, performance, uptime_minutes</query>
+          <earliest>-1h</earliest>
+          <latest>now</latest>
+          <refresh>60s</refresh>
+        </search>
+        <option name="drilldown">cell</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="count">15</option>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <format type="color" field="status">
+          <colorPalette type="map">{"Active":#27ae60,"Normal":#f39c12,"Limited":#e67e22,"Inactive":#95a5a6}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+
+  <!-- SECURITY TIMELINE -->
+  <row>
+    <panel>
+      <chart>
+        <title>Security Event Timeline</title>
+        <search>
+          <query>index=main earliest=-4h | eval category=case(
+            match(_raw, "uname|whoami|hostname"), "Discovery",
+            match(_raw, "ps|tasklist"), "Process Analysis", 
+            match(_raw, "ls|dir|find"), "File Operations",
+            match(_raw, "netstat|ss"), "Network Activity",
+            match(_raw, "curl|wget"), "Data Transfer",
+            match(_raw, "sudo|su|privilege"), "Privilege Operations",
+            1==1, "Other"
+          ) | timechart span=15m count by category</query>
+          <earliest>-4h</earliest>
+          <latest>now</latest>
+          <refresh>60s</refresh>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Events</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.showDataLabels">false</option>
+        <option name="charting.fieldColors">{"Discovery": "#3498db", "Process Analysis": "#27ae60", "File Operations": "#f39c12", "Network Activity": "#e67e22", "Data Transfer": "#8e44ad", "Privilege Operations": "#c0392b", "Other": "#95a5a6"}</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="charting.backgroundColor">#2c3e50</option>
+        <option name="charting.foregroundColor">#ecf0f1</option>
+      </chart>
+    </panel>
+  </row>
+</dashboard>
