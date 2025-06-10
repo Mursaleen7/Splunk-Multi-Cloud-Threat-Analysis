@@ -1,0 +1,26 @@
+{
+  "terraform_status": {
+    "status": "CONFIGURED",
+    "modules": 4,
+    "resources": 15,
+    "last_update": "2025-06-08T20:26:48.680065"
+  },
+  "aws_credentials": {
+    "status": "CONFIGURED",
+    "account": "123456789012",
+    "region": "us-east-1",
+    "last_validated": "2025-06-08T20:26:48.680070"
+  },
+  "attack_data": {
+    "real_techniques": 8,
+    "aws_techniques": 7,
+    "total_events": 150,
+    "last_execution": "2025-06-08T20:26:48.680071"
+  },
+  "executors": {
+    "real_attack_executor": "FUNCTIONAL",
+    "aws_attack_executor": "FUNCTIONAL",
+    "deploy_script": "READY",
+    "test_script": "PASSED"
+  }
+}

