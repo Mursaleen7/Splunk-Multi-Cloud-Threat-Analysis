@@ -628,23 +628,6 @@ def enrich_with_threat_intel(ioc):
 
 ---
 
-## 🤝 Contributing
-
-We welcome contributions to enhance the Security Operations Dashboard:
-
-1. **Fork the repository**
-2. **Create feature branches** for new capabilities
-3. **Submit pull requests** with detailed descriptions
-4. **Follow coding standards** for XML and SPL queries
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
 ## 🙏 Acknowledgments
 
 - **MITRE Corporation** for the ATT&CK framework
