@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  attack-range:
+    build: .
+    container_name: cloud-attack-range
+    volumes:
+      - .:/app
+      - ~/.aws:/home/splunk/.aws:ro
+      - ~/.ssh:/home/splunk/.ssh:ro
+    environment:
+      - AWS_PROFILE=default
+      - PYTHONPATH=/app
+      - OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+    working_dir: /app
+    command: /bin/bash
+    stdin_open: true
+    tty: true
+    
+  # Local Splunk container for testing
+  splunk:
+    image: splunk/splunk:latest
+    container_name: local-splunk
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_PASSWORD=TestPassword123!
+    ports:
+      - "8000:8000"
+      - "8088:8088"
+      - "8089:8089"
+    volumes:
+      - splunk-data:/opt/splunk/var
+      - splunk-etc:/opt/splunk/etc
+    
+  # Optional: LocalStack for AWS simulation
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3,ec2,iam,sts,cloudformation
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+    volumes:
+      - localstack-data:/tmp/localstack
+
+volumes:
+  splunk-data:
+  splunk-etc:
+  localstack-data: 
