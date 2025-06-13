@@ -1,10 +1,10 @@
-# 🛡️ Splunk Cloud Threat Analysis Platform
+# 🛡️ Splunk Cloud Attack Range
 
 ## 🔍 Project Overview
 
 The **Splunk Cloud Attack Range** is a hands-on cybersecurity lab environment built for practical AWS security monitoring and MITRE ATT&CK-based attack simulation. This project combines **AWS infrastructure provisioning**, **Splunk dashboarding**, and **real attack execution** to create a complete security operations testbed.
 
-![Security Operations Dashboard](./img/Screenshot%202025-06-14%20at%201.50.14%20AM.png)
+![Security Operations Dashboard](./img/img1.png)
 
 The dashboard above demonstrates my implementation of real-time security monitoring with Splunk, including executive metrics, MITRE ATT&CK framework coverage, and detailed command execution monitoring. The "ELEVATED" threat assessment is dynamically calculated based on event volume thresholds.
 
@@ -16,7 +16,7 @@ The dashboard above demonstrates my implementation of real-time security monitor
 - **Working with real AWS credentials** to demonstrate actual API response patterns
 - **IAM permission boundaries testing** with real access denied messages
 
-![AWS Attack Execution](./img/Screenshot%202025-06-14%20at%201.50.41%20AM.png)
+![AWS Attack Execution](./img/img3.png)
 
 As shown above, the system captures real AWS API calls, including access denied errors that demonstrate my understanding of AWS's permission model and how CloudTrail logs API activity. Each command is executed with proper technique mapping (T1537 - AWS Data Transfer in this example).
 
@@ -32,7 +32,7 @@ As shown above, the system captures real AWS API calls, including access denied 
   - and more...
 - **Command & Control (C2) simulation** with DNS lookups and network discovery
 
-![MITRE ATT&CK Coverage](./img/Screenshot%202025-06-14%20at%201.50.28%20AM.png)
+![MITRE ATT&CK Coverage](./img/img2.png)
 
 The dashboard section above shows my implementation of MITRE ATT&CK framework monitoring. Each technique panel tracks specific attack patterns using carefully crafted Splunk queries that identify command patterns associated with that technique. The counts represent actual executed commands matching each technique signature.
 
@@ -43,7 +43,7 @@ The dashboard section above shows my implementation of MITRE ATT&CK framework mo
 - **Security event timeline** for chronological attack visualization
 - **Command execution monitor** showing detailed attack commands and results
 
-![Security Event Analysis](./img/Screenshot%202025-06-14%20at%201.51.01%20AM.png)
+![Security Event Analysis](./img/img4.png)
 
 The Security Event Analysis section demonstrates my understanding of how to correlate security events by technique, risk level, host, and source. This table implements dynamic risk scoring based on technique severity and provides analysts with the context needed for triage.
 
