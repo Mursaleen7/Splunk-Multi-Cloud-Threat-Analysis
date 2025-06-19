@@ -71,7 +71,7 @@ Before diving into the technical details, it's important to understand the overa
 └─────────────────────────┘      └───────────────────────┘      └──────────────────────┘
 ```
 
-### Real-Time Security Operations Dashboard
+### Real-Time Splunk Security Dashboard
 ![Security Operations Dashboard](./img/img1.png)
 
 The dashboard above demonstrates real-time security monitoring with Splunk, including executive metrics, MITRE ATT&CK framework coverage, and detailed command execution monitoring. The "ELEVATED" threat assessment is dynamically calculated based on event volume thresholds.
@@ -163,10 +163,10 @@ To make the data more useful for security analysis, I created field extractions 
 
 This enables powerful searching and correlation across different log sources.
 
-### AWS CloudTrail API Activity Log Monitoring
-![AWS CloudTrail Activity Logs](./img/img3.png)
+### AWS CloudTrail API Activity Terminal Output
+![Terminal Output: AWS CloudTrail Activity](./img/img3.png)
 
-The image above shows CloudTrail logs capturing AWS API calls, including both successful operations and access denied errors. This demonstrates understanding of AWS's permission model and how CloudTrail logs API activity.
+The image shows terminal logs of CloudTrail API activity, displaying both successful and failed AWS API calls. The command output demonstrates how the platform captures AWS API operations for security monitoring.
 
 ## Phase 4: Implementing MITRE ATT&CK Framework Dashboards
 
@@ -199,10 +199,10 @@ Each technique panel:
 </panel>
 ```
 
-### MITRE ATT&CK Technique Coverage Dashboard
+### MITRE ATT&CK Framework Coverage Dashboard
 ![MITRE ATT&CK Coverage Dashboard](./img/img2.png)
 
-The dashboard section above implements MITRE ATT&CK framework monitoring. Each technique panel tracks specific attack patterns using carefully crafted Splunk queries that identify command patterns associated with that technique.
+The dashboard above shows the MITRE ATT&CK framework integration, with technique panels displaying attack detection metrics and color-coded severity levels for various attack techniques.
 
 ### Covered Techniques:
 
@@ -258,10 +258,12 @@ Rather than focusing on isolated techniques, I created sophisticated attack chai
    - Code modification
    - Trust exploitation
 
-### Advanced Attack Chain Visualization
-![Advanced Attack Chain Simulation](./img/img7.png)
+### Advanced Attack Chain Terminal Output
+![Terminal Output: Advanced Attack Chain Execution](./img/img7.png)
 
-The implementation tracks progression through attack stages and maps each action to the appropriate MITRE technique:
+The image shows terminal output from the execution of advanced attack chains, displaying the sequence of commands being executed and their results as part of a multi-stage attack scenario.
+
+### Attack Chain Implementation:
 
 ```python
 def map_to_kill_chain(self, technique_ids: List[str]) -> str:
@@ -315,10 +317,10 @@ def t1537_aws_data_transfer(self):
         self.log_attack_event("T1537", "AWS Data Transfer", cmd, result)
 ```
 
-### AWS Attack Command Execution Results
-![AWS Attack Command Execution](./img/img9.png)
+### AWS Attack Command Terminal Output
+![Terminal Output: AWS Attack Command Execution](./img/img9.png)
 
-The image shows the execution of AWS attack commands and their results, demonstrating how the platform logs and tracks each command for analysis.
+The image shows terminal logs of AWS attack commands being executed, including commands like "aws s3 ls" and "aws s3api get-bucket-acl" with their respective output, demonstrating how the platform executes and logs AWS API calls.
 
 ### Safety Measures:
 
@@ -360,10 +362,10 @@ The top-level dashboard includes:
 3. **Infrastructure Status**: Health check of monitored systems
 4. **Event Rate**: Events per minute to indicate activity level
 
-### Detailed Security Event Timeline Analysis
-![Security Event Timeline Analysis](./img/img4.png)
+### Security Event Analysis Terminal Output
+![Terminal Output: Security Event Analysis](./img/img4.png)
 
-The image above shows the detailed security event timeline analysis with event chronology, command execution details, and risk scoring. This allows analysts to quickly identify and investigate potential threats.
+The image shows terminal output displaying security event analysis data, including timestamps, event details, and command execution results. This terminal view allows analysts to see raw security event data for investigation.
 
 ### Alert Implementation:
 
@@ -396,10 +398,10 @@ The platform monitors:
 - Volume mounts
 - Network activity
 
-### Container Security Monitoring Dashboard
-![Container Security Dashboard](./img/img6.png)
+### Container Security Terminal Output
+![Terminal Output: Container Security Monitoring](./img/img6.png)
 
-The dashboard above shows container-specific security metrics, including image vulnerabilities, privileged container usage, and unusual container behavior patterns.
+The image shows terminal output from container security monitoring commands, displaying container status, configuration details, and potential security issues related to container deployments.
 
 ### Kubernetes (EKS) Integration:
 
@@ -452,10 +454,10 @@ The platform includes automated responses for:
 - Blocking malicious IP addresses
 - Rotating exposed secrets
 
-### Cloud Security Controls and Metrics Dashboard
-![Cloud Security Controls and Metrics](./img/img5.png)
+### Cloud Security Controls Terminal Output
+![Terminal Output: Cloud Security Controls](./img/img5.png)
 
-The image above displays cloud security metrics and controls that integrate with the incident response automation system. These visualizations provide visibility into the security posture and help prioritize response actions.
+The image displays terminal output showing cloud security controls and configurations, including security group rules, IAM policies, and other cloud security settings that are monitored and managed by the incident response automation.
 
 ### Implementation of Automated Responses:
 
@@ -511,10 +513,10 @@ This phase analyzes the security findings from the simulated attacks and provide
 3. **Inadequate API Monitoring**: Critical API calls went undetected in default CloudTrail configurations
 4. **Container Escape Vulnerabilities**: Privileged containers could be exploited to access host resources
 
-### Technical Architecture and Implementation View
-![Technical Architecture and Implementation](./img/img8.png)
+### Technical Architecture Diagram
+![Technical Architecture Diagram](./img/img8.png)
 
-The image above provides a detailed view of the technical architecture and implementation of the security monitoring platform, showing how the various components interact.
+The image shows a detailed architectural diagram of the security monitoring platform, illustrating how the various components interact, including AWS services, monitoring tools, and data flows.
 
 ### Security Recommendations:
 
@@ -535,15 +537,15 @@ Based on the attack simulations and findings, I developed the following recommen
 | Container Escape | High | Low | Medium | Security Context restrictions |
 | Credential Exposure | Critical | Medium | High | Secret rotation, MFA |
 
-### MITRE ATT&CK Detection Coverage Analysis
-![MITRE ATT&CK Detection Coverage Analysis](./img/img10.png)
+### MITRE ATT&CK Detection Rules Terminal Output
+![Terminal Output: MITRE ATT&CK Detection Rules](./img/img10.png)
 
-The image above shows the detailed coverage analysis of MITRE ATT&CK techniques, highlighting which techniques are well-detected by the platform's rules and which may need additional detection capabilities.
+The image shows terminal output displaying MITRE ATT&CK detection rules implementation, including Splunk queries, rule definitions, and detection capabilities for various attack techniques.
 
-### Attack Chain Correlation and Analysis
-![Attack Chain Correlation Analysis](./img/img11.png)
+### Attack Chain Correlation Terminal Output
+![Terminal Output: Attack Chain Correlation](./img/img11.png)
 
-The image demonstrates how the platform correlates multiple attack techniques into cohesive attack chains, providing context and improved detection capabilities for complex attack patterns.
+The terminal output shows the correlation of multiple attack techniques into cohesive chains, displaying the relationship between different commands and how they form part of larger attack patterns.
 
 ## Phase 11: Challenges and Lessons Learned
 
