@@ -71,10 +71,10 @@ Before diving into the technical details, it's important to understand the overa
 └─────────────────────────┘      └───────────────────────┘      └──────────────────────┘
 ```
 
-### AWS Infrastructure Deployment Diagram
-![AWS Infrastructure Deployment Diagram](./img/img8.png)
+### Cloud Architecture Overview
+![Cloud Architecture Overview](./img/img8.png)
 
-The image shows a detailed AWS infrastructure deployment diagram for the security monitoring platform, illustrating the VPC configuration, security groups, EC2 instances, and network topology used in the project.
+This image shows a comprehensive cloud architecture overview diagram with network components, security layers, and data flow pathways between different system elements.
 
 ### Executive Security Dashboard
 ![Executive Security Dashboard](./img/img1.png)
@@ -320,10 +320,10 @@ def t1537_aws_data_transfer(self):
         self.log_attack_event("T1537", "AWS Data Transfer", cmd, result)
 ```
 
-### AWS CloudTrail Log Analysis
-![AWS CloudTrail Log Analysis](./img/img9.png)
+### Security Command Output
+![Security Command Output](./img/img9.png)
 
-The image shows CloudTrail log analysis output with detailed AWS API call information, including event sources, usernames, and API actions. This demonstrates how the platform captures and analyzes AWS API activity for security monitoring purposes.
+This image displays terminal command output showing security-related commands and their results, with multiple command executions and their corresponding responses visible in the console.
 
 ### Safety Measures:
 
@@ -401,10 +401,10 @@ The platform monitors:
 - Volume mounts
 - Network activity
 
-### Docker Container Inspection Output
-![Docker Container Inspection Output](./img/img6.png)
+### System Monitoring Interface
+![System Monitoring Interface](./img/img6.png)
 
-The image displays Docker container inspection command output showing container configuration details, network settings, and mount points. This information is critical for identifying container security risks and potential vulnerabilities.
+This image shows a system monitoring interface with multiple panels displaying status information, metrics, and configuration details for various system components.
 
 ### Kubernetes (EKS) Integration:
 
@@ -457,10 +457,10 @@ The platform includes automated responses for:
 - Blocking malicious IP addresses
 - Rotating exposed secrets
 
-### AWS Security Configuration Analysis
-![AWS Security Configuration Analysis](./img/img5.png)
+### Security Analysis Dashboard
+![Security Analysis Dashboard](./img/img5.png)
 
-This output shows AWS security configuration analysis results, including IAM role permissions, security group rules, and resource access policies. It provides security teams with detailed information about potential security misconfigurations in the AWS environment.
+This image displays a security analysis dashboard with multiple visualization panels showing security metrics, status indicators, and analytical data related to system security.
 
 ### Implementation of Automated Responses:
 
