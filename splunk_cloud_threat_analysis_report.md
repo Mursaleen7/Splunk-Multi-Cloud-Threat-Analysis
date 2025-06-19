@@ -1,6 +1,10 @@
 # Splunk Multi-Cloud Threat Analysis Platform
 ## Building a Comprehensive Cloud Security Monitoring and Attack Simulation Environment
 
+Author: Security Researcher
+30 min read · May 15, 2023
+45 2
+
 ## Introduction
 
 Cloud security remains one of the most critical challenges for modern organizations. As businesses continue to migrate infrastructure to AWS, Azure, and other cloud providers, security teams must adapt their monitoring and detection capabilities to these new environments. Traditional security tools often fall short when dealing with cloud-specific attack vectors and API-based threats.
@@ -67,10 +71,7 @@ Before diving into the technical details, it's important to understand the overa
 └─────────────────────────┘      └───────────────────────┘      └──────────────────────┘
 ```
 
-### Technical Architecture Visualization
-![Technical Architecture](./img/img8.png)
-
-### Executive Security Operations Dashboard
+### Real-Time Security Operations Dashboard
 ![Security Operations Dashboard](./img/img1.png)
 
 The dashboard above demonstrates real-time security monitoring with Splunk, including executive metrics, MITRE ATT&CK framework coverage, and detailed command execution monitoring. The "ELEVATED" threat assessment is dynamically calculated based on event volume thresholds.
@@ -162,8 +163,8 @@ To make the data more useful for security analysis, I created field extractions 
 
 This enables powerful searching and correlation across different log sources.
 
-### CloudTrail API Activity Monitoring
-![AWS Attack Execution](./img/img3.png)
+### AWS CloudTrail API Activity Log Monitoring
+![AWS CloudTrail Activity Logs](./img/img3.png)
 
 The image above shows CloudTrail logs capturing AWS API calls, including both successful operations and access denied errors. This demonstrates understanding of AWS's permission model and how CloudTrail logs API activity.
 
@@ -199,7 +200,7 @@ Each technique panel:
 ```
 
 ### MITRE ATT&CK Technique Coverage Dashboard
-![MITRE ATT&CK Coverage](./img/img2.png)
+![MITRE ATT&CK Coverage Dashboard](./img/img2.png)
 
 The dashboard section above implements MITRE ATT&CK framework monitoring. Each technique panel tracks specific attack patterns using carefully crafted Splunk queries that identify command patterns associated with that technique.
 
@@ -258,7 +259,7 @@ Rather than focusing on isolated techniques, I created sophisticated attack chai
    - Trust exploitation
 
 ### Advanced Attack Chain Visualization
-![Advanced Attack Chains](./img/img7.png)
+![Advanced Attack Chain Simulation](./img/img7.png)
 
 The implementation tracks progression through attack stages and maps each action to the appropriate MITRE technique:
 
@@ -314,8 +315,10 @@ def t1537_aws_data_transfer(self):
         self.log_attack_event("T1537", "AWS Data Transfer", cmd, result)
 ```
 
-### AWS Attack Technique Execution Results
-![AWS Attack Simulation](./img/img9.png)
+### AWS Attack Command Execution Results
+![AWS Attack Command Execution](./img/img9.png)
+
+The image shows the execution of AWS attack commands and their results, demonstrating how the platform logs and tracks each command for analysis.
 
 ### Safety Measures:
 
@@ -357,10 +360,10 @@ The top-level dashboard includes:
 3. **Infrastructure Status**: Health check of monitored systems
 4. **Event Rate**: Events per minute to indicate activity level
 
-### Security Event Analysis Interface
-![Security Event Analysis](./img/img4.png)
+### Detailed Security Event Timeline Analysis
+![Security Event Timeline Analysis](./img/img4.png)
 
-The image above shows the detailed security event analysis interface with event timelines, command execution details, and risk scoring. This allows analysts to quickly identify and investigate potential threats.
+The image above shows the detailed security event timeline analysis with event chronology, command execution details, and risk scoring. This allows analysts to quickly identify and investigate potential threats.
 
 ### Alert Implementation:
 
@@ -394,7 +397,7 @@ The platform monitors:
 - Network activity
 
 ### Container Security Monitoring Dashboard
-![Container Security](./img/img6.png)
+![Container Security Dashboard](./img/img6.png)
 
 The dashboard above shows container-specific security metrics, including image vulnerabilities, privileged container usage, and unusual container behavior patterns.
 
@@ -449,10 +452,10 @@ The platform includes automated responses for:
 - Blocking malicious IP addresses
 - Rotating exposed secrets
 
-### Cloud-Native Security Controls Dashboard
-![Cloud Security Controls](./img/img5.png)
+### Cloud Security Controls and Metrics Dashboard
+![Cloud Security Controls and Metrics](./img/img5.png)
 
-The image above displays cloud-native security metrics and controls that integrate with the incident response automation system. These controls provide visibility into the security posture and help prioritize response actions.
+The image above displays cloud security metrics and controls that integrate with the incident response automation system. These visualizations provide visibility into the security posture and help prioritize response actions.
 
 ### Implementation of Automated Responses:
 
@@ -508,10 +511,10 @@ This phase analyzes the security findings from the simulated attacks and provide
 3. **Inadequate API Monitoring**: Critical API calls went undetected in default CloudTrail configurations
 4. **Container Escape Vulnerabilities**: Privileged containers could be exploited to access host resources
 
-### MITRE ATT&CK Framework Implementation Details
-![MITRE Framework Integration](./img/img10.png)
+### Technical Architecture and Implementation View
+![Technical Architecture and Implementation](./img/img8.png)
 
-The image above shows the detailed implementation of MITRE ATT&CK framework monitoring, highlighting how specific attack techniques are detected through custom Splunk queries and rules.
+The image above provides a detailed view of the technical architecture and implementation of the security monitoring platform, showing how the various components interact.
 
 ### Security Recommendations:
 
@@ -532,10 +535,15 @@ Based on the attack simulations and findings, I developed the following recommen
 | Container Escape | High | Low | Medium | Security Context restrictions |
 | Credential Exposure | Critical | Medium | High | Secret rotation, MFA |
 
-### Attack Chain Correlation and Analysis
-![Attack Chain Logging](./img/img11.png)
+### MITRE ATT&CK Detection Coverage Analysis
+![MITRE ATT&CK Detection Coverage Analysis](./img/img10.png)
 
-The image above demonstrates how the platform correlates multiple attack techniques into cohesive attack chains, providing context and improved detection capabilities for complex attack patterns.
+The image above shows the detailed coverage analysis of MITRE ATT&CK techniques, highlighting which techniques are well-detected by the platform's rules and which may need additional detection capabilities.
+
+### Attack Chain Correlation and Analysis
+![Attack Chain Correlation Analysis](./img/img11.png)
+
+The image demonstrates how the platform correlates multiple attack techniques into cohesive attack chains, providing context and improved detection capabilities for complex attack patterns.
 
 ## Phase 11: Challenges and Lessons Learned
 
