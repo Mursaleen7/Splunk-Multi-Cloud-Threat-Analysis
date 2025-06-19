@@ -67,7 +67,10 @@ Before diving into the technical details, it's important to understand the overa
 └─────────────────────────┘      └───────────────────────┘      └──────────────────────┘
 ```
 
-### Executive Dashboard View
+### Technical Architecture Visualization
+![Technical Architecture](./img/img8.png)
+
+### Executive Security Operations Dashboard
 ![Security Operations Dashboard](./img/img1.png)
 
 The dashboard above demonstrates real-time security monitoring with Splunk, including executive metrics, MITRE ATT&CK framework coverage, and detailed command execution monitoring. The "ELEVATED" threat assessment is dynamically calculated based on event volume thresholds.
@@ -159,7 +162,7 @@ To make the data more useful for security analysis, I created field extractions 
 
 This enables powerful searching and correlation across different log sources.
 
-### CloudTrail Log Analysis
+### CloudTrail API Activity Monitoring
 ![AWS Attack Execution](./img/img3.png)
 
 The image above shows CloudTrail logs capturing AWS API calls, including both successful operations and access denied errors. This demonstrates understanding of AWS's permission model and how CloudTrail logs API activity.
@@ -195,7 +198,7 @@ Each technique panel:
 </panel>
 ```
 
-### MITRE Technique Monitoring Dashboard
+### MITRE ATT&CK Technique Coverage Dashboard
 ![MITRE ATT&CK Coverage](./img/img2.png)
 
 The dashboard section above implements MITRE ATT&CK framework monitoring. Each technique panel tracks specific attack patterns using carefully crafted Splunk queries that identify command patterns associated with that technique.
@@ -357,6 +360,8 @@ The top-level dashboard includes:
 ### Security Event Analysis Interface
 ![Security Event Analysis](./img/img4.png)
 
+The image above shows the detailed security event analysis interface with event timelines, command execution details, and risk scoring. This allows analysts to quickly identify and investigate potential threats.
+
 ### Alert Implementation:
 
 Alerts are configured based on:
@@ -390,6 +395,8 @@ The platform monitors:
 
 ### Container Security Monitoring Dashboard
 ![Container Security](./img/img6.png)
+
+The dashboard above shows container-specific security metrics, including image vulnerabilities, privileged container usage, and unusual container behavior patterns.
 
 ### Kubernetes (EKS) Integration:
 
@@ -442,8 +449,10 @@ The platform includes automated responses for:
 - Blocking malicious IP addresses
 - Rotating exposed secrets
 
-### Cloud-Specific Security Controls Dashboard
+### Cloud-Native Security Controls Dashboard
 ![Cloud Security Controls](./img/img5.png)
+
+The image above displays cloud-native security metrics and controls that integrate with the incident response automation system. These controls provide visibility into the security posture and help prioritize response actions.
 
 ### Implementation of Automated Responses:
 
@@ -499,8 +508,10 @@ This phase analyzes the security findings from the simulated attacks and provide
 3. **Inadequate API Monitoring**: Critical API calls went undetected in default CloudTrail configurations
 4. **Container Escape Vulnerabilities**: Privileged containers could be exploited to access host resources
 
-### MITRE Framework Implementation Analysis
+### MITRE ATT&CK Framework Implementation Details
 ![MITRE Framework Integration](./img/img10.png)
+
+The image above shows the detailed implementation of MITRE ATT&CK framework monitoring, highlighting how specific attack techniques are detected through custom Splunk queries and rules.
 
 ### Security Recommendations:
 
@@ -521,8 +532,10 @@ Based on the attack simulations and findings, I developed the following recommen
 | Container Escape | High | Low | Medium | Security Context restrictions |
 | Credential Exposure | Critical | Medium | High | Secret rotation, MFA |
 
-### Attack Chain Logging and Analysis
+### Attack Chain Correlation and Analysis
 ![Attack Chain Logging](./img/img11.png)
+
+The image above demonstrates how the platform correlates multiple attack techniques into cohesive attack chains, providing context and improved detection capabilities for complex attack patterns.
 
 ## Phase 11: Challenges and Lessons Learned
 
