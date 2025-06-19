@@ -1,8 +1,8 @@
-# 🛡️ Splunk Cloud Attack Range
+# 🛡️ Splunk Cloud Threat Analysis Platform
 
 ## 🔍 Project Overview
 
-The **Splunk Cloud Attack Range** is a hands-on cybersecurity lab environment built for practical AWS security monitoring and MITRE ATT&CK-based attack simulation. This project combines **AWS infrastructure provisioning**, **Splunk dashboarding**, and **real attack execution** to create a complete security operations testbed.
+The **Splunk Cloud Threat Analysis Platform** is a hands-on cybersecurity lab environment built for practical AWS security monitoring and MITRE ATT&CK-based attack simulation. This project combines **AWS infrastructure provisioning**, **Splunk dashboarding**, and **real attack execution** to create a complete security operations testbed.
 
 ![Security Operations Dashboard](./img/img1.png)
 
