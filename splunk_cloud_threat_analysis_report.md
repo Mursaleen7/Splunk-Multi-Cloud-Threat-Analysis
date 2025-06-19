@@ -71,6 +71,7 @@ Before diving into the technical details, it's important to understand the overa
 └─────────────────────────┘      └───────────────────────┘      └──────────────────────┘
 ```
 
+### Executive Dashboard View
 ![Security Operations Dashboard](./img/img1.png)
 
 The dashboard above demonstrates real-time security monitoring with Splunk, including executive metrics, MITRE ATT&CK framework coverage, and detailed command execution monitoring. The "ELEVATED" threat assessment is dynamically calculated based on event volume thresholds.
@@ -162,6 +163,7 @@ To make the data more useful for security analysis, I created field extractions 
 
 This enables powerful searching and correlation across different log sources.
 
+### CloudTrail Log Analysis
 ![AWS Attack Execution](./img/img3.png)
 
 The image above shows CloudTrail logs capturing AWS API calls, including both successful operations and access denied errors. This demonstrates understanding of AWS's permission model and how CloudTrail logs API activity.
@@ -197,6 +199,7 @@ Each technique panel:
 </panel>
 ```
 
+### MITRE Technique Monitoring Dashboard
 ![MITRE ATT&CK Coverage](./img/img2.png)
 
 The dashboard section above implements MITRE ATT&CK framework monitoring. Each technique panel tracks specific attack patterns using carefully crafted Splunk queries that identify command patterns associated with that technique.
@@ -255,6 +258,7 @@ Rather than focusing on isolated techniques, I created sophisticated attack chai
    - Code modification
    - Trust exploitation
 
+### Advanced Attack Chain Visualization
 ![Advanced Attack Chains](./img/img7.png)
 
 The implementation tracks progression through attack stages and maps each action to the appropriate MITRE technique:
@@ -311,6 +315,7 @@ def t1537_aws_data_transfer(self):
         self.log_attack_event("T1537", "AWS Data Transfer", cmd, result)
 ```
 
+### AWS Attack Technique Execution Results
 ![AWS Attack Simulation](./img/img9.png)
 
 ### Safety Measures:
@@ -353,6 +358,7 @@ The top-level dashboard includes:
 3. **Infrastructure Status**: Health check of monitored systems
 4. **Event Rate**: Events per minute to indicate activity level
 
+### Security Event Analysis Interface
 ![Security Event Analysis](./img/img4.png)
 
 ### Alert Implementation:
@@ -386,6 +392,7 @@ The platform monitors:
 - Volume mounts
 - Network activity
 
+### Container Security Monitoring Dashboard
 ![Container Security](./img/img6.png)
 
 ### Kubernetes (EKS) Integration:
@@ -427,121 +434,98 @@ def container_escape_simulation(self):
     )
 ```
 
-## Phase 9: Cloud-Native Security Controls
+## Phase 9: Incident Response Automation
 
-This phase focuses on implementing cloud-specific security monitoring for AWS services.
+This phase focuses on automating response actions when security incidents are detected. Automation reduces response time and helps contain threats before they can spread.
 
-### CloudTrail Analysis:
+### Automated Response Actions:
 
-CloudTrail provides a record of all AWS API calls, which is essential for security monitoring. I implemented:
+The platform includes automated responses for:
+- Isolating compromised instances
+- Revoking suspicious IAM credentials
+- Blocking malicious IP addresses
+- Rotating exposed secrets
 
-- Real-time CloudTrail log ingestion
-- Custom field extractions for security-relevant fields
-- Correlation with other data sources
-
+### Cloud-Specific Security Controls Dashboard
 ![Cloud Security Controls](./img/img5.png)
 
-The dashboard above shows cloud-specific security metrics, highlighting potential areas of concern in the AWS environment.
+### Implementation of Automated Responses:
 
-### IAM Permission Checks:
-
-The platform monitors for:
-- Overly permissive IAM policies
-- Temporary credential usage
-- Cross-account access
-- Role assumption activities
-
-### S3 Bucket Security:
-
-Given the frequency of S3-related security incidents, special attention is paid to:
-- Public bucket detection
-- ACL modifications
-- Cross-origin resource sharing (CORS) configurations
-- Object-level operations
-
-Example S3 monitoring query:
-```
-index=aws sourcetype=aws:cloudtrail eventName=PutBucketAcl OR eventName=PutBucketPolicy
-| stats count by userIdentity.arn, requestParameters.bucketName, eventName
-| eval risk_level=case(
-    like(requestParameters.AccessControlPolicy, "%AllUsers%"), "CRITICAL",
-    like(requestParameters.bucketPolicy, "%\"Principal\":\"*\"%"), "CRITICAL",
-    1=1, "MEDIUM")
-```
-
-## Phase 10: Technical Implementation Details
-
-This section provides a deeper look at the technical implementation of key components.
-
-### MITRE ATT&CK Implementation:
-
-The MITRE ATT&CK framework is implemented through:
-
-```xml
-<!-- From SIMPLE_WORKING_DASHBOARD.xml -->
-<panel>
-  <single>
-    <title>T1083 • File Discovery</title>
-    <search>
-      <query>index=main ("ls" OR "dir" OR "find" OR "locate") earliest=-1h | stats count</query>
-      <earliest>-1h</earliest>
-      <latest>now</latest>
-      <refresh>30s</refresh>
-    </search>
-    <option name="drilldown">none</option>
-  </single>
-</panel>
-```
-
-![MITRE Framework Integration](./img/img10.png)
-
-This Splunk query demonstrates proper technique detection by:
-1. Identifying file discovery commands accurately
-2. Using pattern matching for common variations
-3. Implementing proper time-based filtering
-4. Creating actionable metrics for security analysts
-
-### Attack Chain Logging:
-
-The platform implements sophisticated attack chain logging:
+The response automation is integrated with Splunk alert actions and can be triggered when specific conditions are met:
 
 ```python
-def log_attack_chain_event(self, chain_name: str, stage: str, technique_ids: List[str], 
-                          technique_names: List[str], actions: List[str], results: List[Dict]):
-    """Log sophisticated attack chain events"""
-    event_data = {
-        "time": int(time.time()),
-        "sourcetype": "advanced_attack_chain",
-        "source": "advanced_attack_chains",
-        "event": {
-            "attack_chain": chain_name,
-            "attack_stage": stage,
-            "technique_ids": technique_ids,
-            "technique_names": technique_names,
-            "actions_executed": actions,
-            "execution_results": results,
-            "attack_sophistication": "HIGH",
-            "kill_chain_phase": self.map_to_kill_chain(technique_ids),
-            "timestamp": datetime.now().isoformat(),
-            "attack_duration": self.calculate_attack_duration(),
-            "lateral_movement": any("T1021" in tid for tid in technique_ids),
-            "persistence_established": any("T1053" in tid or "T1543" in tid for tid in technique_ids),
-            "data_exfiltration": any("T1041" in tid or "T1537" in tid for tid in technique_ids),
-            "credential_access": any("T1552" in tid or "T1555" in tid for tid in technique_ids)
-        }
-    }
-    
-    # Send to Splunk
+def isolate_instance(instance_id, region='us-east-1'):
+    """Isolate an EC2 instance by applying a restrictive security group"""
     try:
-        response = requests.post(self.hec_url, headers=self.headers, json=event_data, timeout=5)
-        if response.status_code == 200:
-            self.logger.info(f"✅ Attack chain logged: {chain_name} - Stage {stage}")
-        else:
-            self.logger.warning(f"⚠️ Failed to log to Splunk: HTTP {response.status_code}")
+        ec2 = boto3.client('ec2', region_name=region)
+        
+        # Create security group that blocks all traffic
+        response = ec2.create_security_group(
+            GroupName=f'isolation-sg-{int(time.time())}',
+            Description='Temporary security group for instance isolation',
+            VpcId=get_instance_vpc_id(instance_id, ec2)
+        )
+        isolation_sg_id = response['GroupId']
+        
+        # Apply the security group to the instance
+        ec2.modify_instance_attribute(
+            InstanceId=instance_id,
+            Groups=[isolation_sg_id]
+        )
+        
+        return {
+            "success": True,
+            "message": f"Instance {instance_id} isolated with security group {isolation_sg_id}"
+        }
     except Exception as e:
-        self.logger.warning(f"⚠️ Splunk logging error: {e}")
+        return {
+            "success": False,
+            "message": f"Failed to isolate instance {instance_id}: {str(e)}"
+        }
 ```
 
+### Response Workflow:
+
+1. Security incident detected via Splunk alert
+2. Incident details sent to response orchestration module
+3. Automated playbooks executed based on incident type
+4. Response actions logged for auditing and review
+5. Notification sent to security team
+
+## Phase 10: Security Findings and Recommendations
+
+This phase analyzes the security findings from the simulated attacks and provides recommendations for improving cloud security posture.
+
+### Key Security Findings:
+
+1. **Excessive IAM Permissions**: Many roles had unnecessary permissions that could be exploited
+2. **S3 Bucket Misconfigurations**: Several buckets had overly permissive ACLs
+3. **Inadequate API Monitoring**: Critical API calls went undetected in default CloudTrail configurations
+4. **Container Escape Vulnerabilities**: Privileged containers could be exploited to access host resources
+
+### MITRE Framework Implementation Analysis
+![MITRE Framework Integration](./img/img10.png)
+
+### Security Recommendations:
+
+Based on the attack simulations and findings, I developed the following recommendations:
+
+1. **Implement Just-Enough-Access (JEA)** IAM policies that follow the principle of least privilege
+2. **Enable AWS Config Rules** to detect and remediate common misconfigurations
+3. **Create Custom CloudTrail Insights** for high-risk API operations
+4. **Implement Container Security Scanning** in the CI/CD pipeline
+5. **Deploy AWS GuardDuty** for additional threat detection capabilities
+
+### Risk Assessment Matrix:
+
+| Risk Area | Impact | Likelihood | Risk Level | Mitigation |
+|-----------|--------|------------|------------|------------|
+| Excessive IAM Permissions | High | High | Critical | Implement least privilege |
+| S3 Data Exfiltration | High | Medium | High | Block public access, encryption |
+| Container Escape | High | Low | Medium | Security Context restrictions |
+| Credential Exposure | Critical | Medium | High | Secret rotation, MFA |
+
+### Attack Chain Logging and Analysis
 ![Attack Chain Logging](./img/img11.png)
 
 ## Phase 11: Challenges and Lessons Learned
