@@ -1,10 +1,6 @@
 # Splunk Multi-Cloud Threat Analysis Platform
 ## Building a Comprehensive Cloud Security Monitoring and Attack Simulation Environment
 
-Author: Security Researcher
-30 min read · May 15, 2023
-45 2
-
 ## Introduction
 
 Cloud security remains one of the most critical challenges for modern organizations. As businesses continue to migrate infrastructure to AWS, Azure, and other cloud providers, security teams must adapt their monitoring and detection capabilities to these new environments. Traditional security tools often fall short when dealing with cloud-specific attack vectors and API-based threats.
