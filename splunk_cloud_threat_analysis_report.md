@@ -401,11 +401,6 @@ The platform monitors:
 - Volume mounts
 - Network activity
 
-### System Monitoring Interface
-![System Monitoring Interface](./img/img6.png)
-
-This image shows a system monitoring interface with multiple panels displaying status information, metrics, and configuration details for various system components.
-
 ### Kubernetes (EKS) Integration:
 
 For organizations using Kubernetes, the platform can be extended to monitor:
@@ -457,10 +452,10 @@ The platform includes automated responses for:
 - Blocking malicious IP addresses
 - Rotating exposed secrets
 
-### Security Analysis Dashboard
-![Security Analysis Dashboard](./img/img5.png)
+### Attack Data Ingestion
+![Attack Data Ingestion](./img/img5.png)
 
-This image displays a security analysis dashboard with multiple visualization panels showing security metrics, status indicators, and analytical data related to system security.
+This image displays all the attack data being ingested.
 
 ### Implementation of Automated Responses:
 
@@ -536,14 +531,10 @@ Based on the attack simulations and findings, I developed the following recommen
 | Credential Exposure | Critical | Medium | High | Secret rotation, MFA |
 
 ### MITRE ATT&CK Detection Coverage
+![](./img/img11.png)
 ![MITRE ATT&CK Detection Coverage](./img/img10.png)
 
 The image shows a detailed analysis of MITRE ATT&CK technique coverage, highlighting which specific attack techniques are detected by the platform's rules and which may require additional detection capabilities. This helps identify potential gaps in the security monitoring configuration.
-
-### Attack Chain Correlation Analysis
-![Attack Chain Correlation Analysis](./img/img11.png)
-
-This visualization demonstrates how the platform correlates multiple individual attack techniques into cohesive attack chains. The diagram shows the relationships between different attack stages, providing better context for security analysts investigating complex threats.
 
 ## Phase 11: Challenges and Lessons Learned
 
