@@ -213,4 +213,4 @@ Modify `SIMPLE_WORKING_DASHBOARD.xml` to create custom security visualizations.
 
 ---
 
-*This project is designed for security education and authorized testing environments only. All attack simulations should be performed only in controlled environments.*
+*This project is only made for security education and authorized testing environments only. Ensure that all attack simulations should be performed only in controlled environments.*
